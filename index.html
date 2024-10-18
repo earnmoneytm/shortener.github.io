@@ -1,311 +1,427 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Complete ad shorteners and withdraw $20 to PayPal after finishing all 50 links.">
-    <title>Complete Ad Shorteners - Earn $20</title>
+    <title>Earn Money by Clicking Ads!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        /* General styles */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background-color: #f4f4f4;
+            min-height: 100vh;
         }
 
         header {
-            background-color: #333;
-            color: #fff;
+            background-color: #3F51B5;
+            width: 100%;
             padding: 20px;
-            text-align: center;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 36px;
-        }
-
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .shortener-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        .shortener-item {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 10px;
-            width: calc(33.333% - 20px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .shortener-item h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .shortener-item a {
-            display: inline-block;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-        }
-
-        .withdrawal {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        .withdrawal button {
-            background-color: #28a745;
             color: white;
-            padding: 15px 30px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        #balance-display {
+            font-size: 1.8rem;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        #translator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        main {
+            margin-top: 80px;
+            text-align: center;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .instructions {
+            margin: 60px 0;
+            font-size: 1.2rem;
+            color: #333;
+            padding: 10px; /* Added padding */
+        }
+
+        .offer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .offer-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .offer-section:hover {
+            transform: scale(1.02);
+        }
+
+        .offer-title {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .offer-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: not-allowed;
-            opacity: 0.6;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-top: 20px; /* Added margin for the button */
+            transition: background-color 0.3s ease;
+        }
+
+        .offer-button:hover {
+            background-color: #388E3C;
+        }
+
+        .withdraw-section {
+            margin-top: 40px;
+            font-size: 1.3rem;
+        }
+
+        #withdraw-button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        #withdraw-button:enabled {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #333;
-            color: #fff;
             margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            background-color: #eeeeee;
+            width: 100%;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            width: 300px;
+            text-align: center;
+        }
+
+        .modal h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .claim-button {
+            background-color: #FF9800;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .claim-button:hover {
+            background-color: #F57C00;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Complete Ad Shorteners and Earn $20</h1>
-        <p>Finish all 50 ad shorteners to unlock your PayPal reward.</p>
+        <h1 id="page-title">Earn Money by Clicking Ads!</h1>
+        <div id="balance-display">
+            Balance: $<span id="balance">0.00</span>
+        </div>
+        <div id="translator">
+            <select id="languageSelect" onchange="translatePage()">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="ru">Русский</option>
+                <option value="uk">Українська</option>
+                <option value="pl">Polski</option>
+                <option value="it">Italiano</option>
+                <option value="pt">Português</option>
+                <option value="ro">Română</option>
+                <option value="bg">Български</option>
+                <option value="cs">Čeština</option>
+                <option value="sk">Slovenčina</option>
+                <option value="hu">Magyar</option>
+                <option value="lt">Lietuvių</option>
+                <option value="lv">Latviešu</option>
+                <option value="et">Eesti</option>
+            </select>
+        </div>
     </header>
 
-    <div class="container">
-        <div class="shortener-list">
-            <!-- 50 Shortener Links -->
-            <div class="shortener-item">
-                <h2>Ad Shortener 1</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 2</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 3</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 4</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 5</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 6</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 7</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 8</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 9</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 10</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 11</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 12</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 13</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 14</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 15</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 16</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 17</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 18</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 19</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 20</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 21</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 22</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 23</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 24</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 25</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 26</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 27</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 28</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 29</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 30</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 31</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 32</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 33</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 34</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 35</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 36</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 37</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 38</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 39</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 40</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 41</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 42</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 43</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 44</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 45</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 46</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 47</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 48</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 49</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
-            <div class="shortener-item">
-                <h2>Ad Shortener 50</h2>
-                <a href="https://xenfly.com/PgPNP0">Complete Link</a>
-            </div>
+    <main>
+        <section class="instructions">
+            <h2 id="instructions-title">Instructions:</h2>
+            <p id="instructions-text">Earn between $0.02 and $0.04 per ad click. Click on ads as many times as you want, and keep the ad tab open for 5 seconds to maximize your earnings!</p>
+        </section>
+
+        <div class="offer-grid">
+            <section class="offer-section">
+    <h2 class="offer-title" id="offer-title">Earn $0.02 to $0.04 per click!</h2>
+    <a class="offer-button" href="https://www.cpmrevenuegate.com/yqaef35tiq?key=387432c1d8fb0a02d4cd38bfbc560df3" target="_blank" onclick="startOffer(0.02)">Click Ad</a>
+</section>
+<section class="offer-section">
+    <h2 class="offer-title" id="offer-title-2">Earn $0.02 to $0.04 per click!</h2>
+    <a class="offer-button" href="https://www.cpmrevenuegate.com/yqaef35tiq?key=387432c1d8fb0a02d4cd38bfbc560df3" target="_blank" onclick="startOffer(0.03)">Click Ad</a>
+</section>
+<section class="offer-section">
+    <h2 class="offer-title" id="offer-title-3">Earn $0.02 to $0.04 per click!</h2>
+    <a class="offer-button" href="https://www.cpmrevenuegate.com/yqaef35tiq?key=387432c1d8fb0a02d4cd38bfbc560df3" target="_blank" onclick="startOffer(0.04)">Click Ad</a>
+</section>
+<section class="offer-section">
+    <h2 class="offer-title" id="offer-title-3">Earn $0.02 to $0.04 per click!</h2>
+    <a class="offer-button" href="https://www.cpmrevenuegate.com/yqaef35tiq?key=387432c1d8fb0a02d4cd38bfbc560df3" target="_blank" onclick="startOffer(0.04)">Click Ad</a>
+</section>
+
         </div>
 
-        <div class="withdrawal">
-            <button disabled>Withdraw $20 to PayPal</button>
+        <div class="withdraw-section">
+            <h2 id="withdraw-title">Withdraw Your Earnings</h2>
+            <button id="withdraw-button" disabled>Withdraw Earnings</button>
+            <p id="withdraw-message">Minimum balance for withdrawal: $20.00</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Your Company Name. All rights reserved.</p>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal" id="bonusModal">
+        <div class="modal-content">
+            <h2 id="bonus-title">🎉 Welcome! 🎉</h2>
+            <p id="bonus-message">Get a bonus of $5.00 just for signing up!</p>
+            <button class="claim-button" id="claim-bonus">Claim Bonus</button>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2024 Complete Ad Shorteners. All rights reserved.</p>
-    </footer>
+    <script>
+        window.onload = function() {
+            // Check if the bonus has been claimed
+            const bonusClaimed = localStorage.getItem('bonusClaimed');
+            const bonusModal = document.getElementById('bonusModal');
+            if (!bonusClaimed) {
+                bonusModal.style.display = 'flex';
+            }
+
+            // Initialize balance from localStorage
+            let balance = localStorage.getItem('balance');
+            if (balance === null) {
+                balance = 0;
+            } else {
+                balance = parseFloat(balance);
+            }
+            document.getElementById('balance').textContent = balance.toFixed(2);
+            updateWithdrawButton(balance);
+        };
+
+        // Function to update the withdraw button state
+        function updateWithdrawButton(balance) {
+            const withdrawButton = document.getElementById('withdraw-button');
+            if (balance >= 20) {
+                withdrawButton.disabled = false;
+            } else {
+                withdrawButton.disabled = true;
+            }
+        }
+
+        // Function to start offer and update balance
+        function startOffer(amount) {
+            const balanceElement = document.getElementById('balance');
+            let balance = parseFloat(balanceElement.textContent);
+            balance += amount;
+            balanceElement.textContent = balance.toFixed(2);
+            localStorage.setItem('balance', balance);
+            updateWithdrawButton(balance);
+        }
+
+        // Function to claim bonus
+        document.getElementById('claim-bonus').onclick = function() {
+            const balanceElement = document.getElementById('balance');
+            let balance = parseFloat(balanceElement.textContent);
+            balance += 5.00; // Adding bonus amount
+            balanceElement.textContent = balance.toFixed(2);
+            localStorage.setItem('balance', balance);
+            localStorage.setItem('bonusClaimed', 'true'); // Set bonus as claimed
+            document.getElementById('bonusModal').style.display = 'none';
+            updateWithdrawButton(balance);
+        };
+
+        // Function to translate the page
+        function translatePage() {
+            const lang = document.getElementById('languageSelect').value;
+            const translations = {
+                en: {
+                    title: "Earn Money by Clicking Ads!",
+                    instructions: "Earn between $0.02 and $0.04 per ad click. Click on ads as many times as you want, and keep the ad tab open for 5 seconds to maximize your earnings!",
+                    withdrawTitle: "Withdraw Your Earnings",
+                    withdrawMessage: "Minimum balance for withdrawal: $20.00",
+                },
+                es: {
+                    title: "¡Gana dinero haciendo clic en anuncios!",
+                    instructions: "Gana entre $0.02 y $0.04 por clic en anuncios. ¡Haz clic en anuncios tantas veces como quieras y mantén la pestaña abierta durante 5 segundos para maximizar tus ganancias!",
+                    withdrawTitle: "Retira tus ganancias",
+                    withdrawMessage: "Saldo mínimo para retirar: $20.00",
+                },
+                fr: {
+                    title: "Gagnez de l'argent en cliquant sur des annonces !",
+                    instructions: "Gagnez entre 0,02 $ et 0,04 $ par clic sur une annonce. Cliquez sur les annonces autant de fois que vous le souhaitez et gardez l'onglet ouvert pendant 5 secondes pour maximiser vos gains !",
+                    withdrawTitle: "Retirez vos gains",
+                    withdrawMessage: "Solde minimum pour le retrait : 20,00 $",
+                },
+                de: {
+                    title: "Verdienen Sie Geld mit dem Klicken auf Anzeigen!",
+                    instructions: "Verdienen Sie zwischen 0,02 $ und 0,04 $ pro Anzeigenklick. Klicken Sie auf Anzeigen, so oft Sie möchten, und halten Sie die Anzeigentabelle 5 Sekunden lang geöffnet, um Ihre Einnahmen zu maximieren!",
+                    withdrawTitle: "Ziehen Sie Ihre Einnahmen ab",
+                    withdrawMessage: "Mindestguthaben für den Abzug: 20,00 $",
+                },
+                ru: {
+                    title: "Зарабатывайте деньги, нажимая на объявления!",
+                    instructions: "Зарабатывайте от 0,02 до 0,04 доллара за клик по объявлению. Нажимайте на объявления столько раз, сколько хотите, и держите вкладку с объявлением открытой в течение 5 секунд, чтобы максимизировать свои доходы!",
+                    withdrawTitle: "Вывести ваши доходы",
+                    withdrawMessage: "Минимальный баланс для вывода: 20,00 $",
+                },
+                uk: {
+                    title: "Заробіть гроші, натискаючи на оголошення!",
+                    instructions: "Заробляйте від 0,02 до 0,04 долара за клік на оголошення. Натискайте на оголошення стільки разів, скільки хочете, і тримайте вкладку з оголошенням відкритою протягом 5 секунд, щоб максимізувати свої доходи!",
+                    withdrawTitle: "Вивести ваші доходи",
+                    withdrawMessage: "Мінімальний баланс для виведення: 20,00 $",
+                },
+                pl: {
+                    title: "Zarabiaj pieniądze, klikając w reklamy!",
+                    instructions: "Zarabiaj od 0,02 do 0,04 USD za kliknięcie reklamy. Klikaj w reklamy tak często, jak chcesz, i trzymaj zakładkę reklamy otwartą przez 5 sekund, aby zmaksymalizować swoje zarobki!",
+                    withdrawTitle: "Wypłać swoje zarobki",
+                    withdrawMessage: "Minimalne saldo do wypłaty: 20,00 $",
+                },
+                it: {
+                    title: "Guadagna denaro cliccando sugli annunci!",
+                    instructions: "Guadagna tra $0.02 e $0.04 per clic su un annuncio. Clicca sugli annunci quante più volte possibile e mantieni aperta la scheda per 5 secondi per massimizzare i tuoi guadagni!",
+                    withdrawTitle: "Preleva i tuoi guadagni",
+                    withdrawMessage: "Saldo minimo per il prelievo: 20,00 $",
+                },
+                pt: {
+                    title: "Ganhe dinheiro clicando em anúncios!",
+                    instructions: "Ganhe entre $0,02 e $0,04 por clique em anúncios. Clique nos anúncios quantas vezes quiser e mantenha a aba do anúncio aberta por 5 segundos para maximizar seus ganhos!",
+                    withdrawTitle: "Retire seus ganhos",
+                    withdrawMessage: "Saldo mínimo para retirada: $20,00",
+                },
+                ro: {
+                    title: "Câștigă bani dând clic pe anunțuri!",
+                    instructions: "Câștigă între 0,02 $ și 0,04 $ pe clic pe anunț. Dă clic pe anunțuri de câte ori vrei și menține fila anunțului deschisă timp de 5 secunde pentru a-ți maximiza câștigurile!",
+                    withdrawTitle: "Retrage-ți câștigurile",
+                    withdrawMessage: "Soldul minim pentru retragere: 20,00 $",
+                },
+                bg: {
+                    title: "Спечелете пари, като щракнете върху реклами!",
+                    instructions: "Спечелете между 0,02 $ и 0,04 $ за клик върху реклама. Щраквайте върху реклами толкова пъти, колкото искате, и дръжте раздела на рекламата отворен в продължение на 5 секунди, за да максимизирате печалбите си!",
+                    withdrawTitle: "Изтеглете печалбите си",
+                    withdrawMessage: "Минимален баланс за теглене: 20,00 $",
+                },
+                cs: {
+                    title: "Získejte peníze kliknutím na reklamy!",
+                    instructions: "Získejte mezi 0,02 $ a 0,04 $ za kliknutí na reklamu. Klikněte na reklamy, kolikrát chcete, a nechte kartu reklamy otevřenou po dobu 5 sekund, abyste maximalizovali své výdělky!",
+                    withdrawTitle: "Vyberte své výdělky",
+                    withdrawMessage: "Minimální zůstatek pro výběr: 20,00 $",
+                },
+                sk: {
+                    title: "Zarobte peniaze kliknutím na reklamy!",
+                    instructions: "Zarobte medzi 0,02 $ a 0,04 $ za klik na reklamu. Kliknite na reklamy toľkokrát, koľkokrát chcete, a nechajte kartu reklamy otvorenú 5 sekúnd, aby ste maximalizovali svoje zárobky!",
+                    withdrawTitle: "Vyberte si svoje zárobky",
+                    withdrawMessage: "Minimálny zostatok na výber: 20,00 $",
+                },
+                hu: {
+                    title: "Keressen pénzt hirdetésekre való kattintással!",
+                    instructions: "Keressen 0,02 $ és 0,04 $ között hirdetésenként. Kattintson a hirdetésekre annyiszor, ahányszor csak szeretné, és tartsa nyitva a hirdetés fülét 5 másodpercig, hogy maximalizálja a bevételét!",
+                    withdrawTitle: "Kérje vissza a nyereségét",
+                    withdrawMessage: "Minimális egyenleg a visszavonáshoz: 20,00 $",
+                },
+                lt: {
+                    title: "Uždirbkite pinigų spustelėdami skelbimus!",
+                    instructions: "Uždirbkite nuo 0,02 USD iki 0,04 USD už paspaudimą. Spustelėkite skelbimus tiek kartų, kiek norite, ir palaikykite skelbimo skirtuką atidarytą 5 sekundes, kad maksimaliai padidintumėte savo pajamas!",
+                    withdrawTitle: "Išimkite savo pajamas",
+                    withdrawMessage: "Minimali balanso suma, kad būtų galima išimti: 20,00 USD",
+                },
+                lv: {
+                    title: "Pelni naudu, noklikšķinot uz sludinājumiem!",
+                    instructions: "Pelni no 0,02 USD līdz 0,04 USD par klikšķi. Noklikšķiniet uz sludinājumiem tik daudz reižu, cik vēlaties, un turiet sludinājuma cilni atvērtu 5 sekundes, lai maksimāli palielinātu savus ienākumus!",
+                    withdrawTitle: "Izņemiet savus ienākumus",
+                    withdrawMessage: "Minimālais atlikums izņemšanai: 20,00 USD",
+                },
+                et: {
+                    title: "Teenige raha reklaamidele klikates!",
+                    instructions: "Teenige reklaami kliki eest 0,02 kuni 0,04 dollarit. Kliki reklaamidele nii palju kordi kui soovid ja hoia reklaami vahelehte 5 sekundit avatuna, et maksimeerida oma tulu!",
+                    withdrawTitle: "Võtke oma tulud välja",
+                    withdrawMessage: "Minimaalne saldo väljamiseks: 20,00 $",
+                }
+            };
+
+            document.getElementById('page-title').textContent = translations[lang].title;
+            document.getElementById('instructions-title').textContent = "Instructions:"; // Static title
+            document.getElementById('instructions-text').textContent = translations[lang].instructions;
+            document.getElementById('withdraw-title').textContent = translations[lang].withdrawTitle;
+            document.getElementById('withdraw-message').textContent = translations[lang].withdrawMessage;
+        }
+    </script>
+<script type="text/javascript">
+    aclib.runAutoTag({
+        zoneId: 'q4clnp0j6y',
+    });
+</script>
 
 </body>
 </html>
