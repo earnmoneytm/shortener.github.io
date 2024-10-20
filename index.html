@@ -1,435 +1,293 @@
-<!DOCTYPE html> 
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-<script id="aclib" type="text/javascript" src="//acscdn.com/script/aclib.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gana $20 completando acortadores</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, #1e1e1e, #343434);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      text-align: center;
+    }
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Earn Money by Clicking Ads!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        /* General styles */
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            background-color: #f4f4f4;
-            min-height: 100vh;
-        }
+    .container {
+      max-width: 800px;
+      margin: 20px;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+    }
 
-        header {
-            background-color: #3F51B5;
-            width: 100%;
-            padding: 20px;
-            color: white;
-            text-align: center;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-        }
+    h1 {
+      font-size: 2.5rem; /* Tamaño de fuente adaptado para dispositivos */
+      color: #FF5A5F;
+      margin: 0;
+    }
 
-        #balance-display {
-            font-size: 1.8rem;
-            margin-top: 10px;
-            font-weight: bold;
-        }
+    .language-selector select {
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 10px;
+      margin-top: 10px;
+      background-color: #5a67d8;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
 
-        #translator {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
+    .shorteners-list {
+      margin: 30px 0;
+    }
 
-        main {
-            margin-top: 80px;
-            text-align: center;
-            width: 90%;
-            max-width: 1200px;
-        }
+    .shortener-button {
+      background-color: #FF5A5F;
+      color: white;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      margin: 5px 0; /* Espaciado entre botones */
+    }
 
-        .instructions {
-            margin: 60px 0;
-            font-size: 1.2rem;
-            color: #333;
-            padding: 10px; /* Added padding */
-        }
+    .shortener-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+    }
 
-        .offer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
+    .progress-bar {
+      background-color: #444;
+      width: 80%;
+      height: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 20px auto;
+    }
 
-        .offer-section {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            text-align: center;
-        }
+    .progress {
+      background-color: #4CAF50;
+      height: 100%;
+      width: 10%; /* Esto se actualizará dinámicamente */
+    }
 
-        .offer-section:hover {
-            transform: scale(1.02);
-        }
+    .withdraw-button {
+      background-color: #888;
+      padding: 15px 40px;
+      color: white;
+      font-size: 1.5rem;
+      border: none;
+      border-radius: 30px;
+      cursor: not-allowed;
+      margin-top: 20px;
+    }
 
-        .offer-title {
-            font-size: 1.4rem;
-            color: #333;
-            margin-bottom: 25px;
-        }
+    .instructions {
+      margin-top: 40px;
+      text-align: left;
+      max-width: 600px;
+      line-height: 1.6;
+      font-size: 1.1rem;
+    }
 
-        .offer-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            margin-top: 20px; /* Added margin for the button */
-            transition: background-color 0.3s ease;
-        }
+    .footer {
+      margin-top: 50px;
+    }
 
-        .offer-button:hover {
-            background-color: #388E3C;
-        }
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem; /* Ajustar el tamaño del título para pantallas más pequeñas */
+      }
 
-        .withdraw-section {
-            margin-top: 40px;
-            font-size: 1.3rem;
-        }
+      .shortener-button {
+        width: 100%; /* Botones ocupan el ancho completo en móviles */
+        padding: 10px;
+      }
 
-        #withdraw-button {
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            background-color: #f44336;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            opacity: 0.5;
-            pointer-events: none;
-        }
+      .withdraw-button {
+        width: 100%; /* Botón de retiro ocupa el ancho completo en móviles */
+        padding: 10px;
+      }
+    }
+  </style>
+  <script>
+    const translations = {
+      "en": {
+        "title": "Earn $20 Completing Shorteners",
+        "withdrawButton": "Withdraw $20",
+        "completeText": "You must complete all 50 shorteners to unlock this function.",
+        "instructions": `
+          <h2>How to Complete Ouo Shorteners:</h2>
+          <ol>
+            <li><strong>Click the shortener button:</strong> You will be redirected to a new page.</li>
+            <li><strong>Wait 3 to 5 seconds:</strong> In the top right corner, you'll see a countdown.</li>
+            <li><strong>Click "Get Link":</strong> After the countdown ends, click the button to proceed to the original link.</li>
+          </ol>
+          <p>Complete this process 50 times to unlock your $20 reward!</p>
+        `
+      },
+      "es": {
+        "title": "Gana $20 completando acortadores",
+        "withdrawButton": "Retirar $20",
+        "completeText": "Debes completar los 50 acortadores para desbloquear esta función.",
+        "instructions": `
+          <h2>Cómo completar los acortadores Ouo:</h2>
+          <ol>
+            <li><strong>Haz clic en el botón del acortador:</strong> Serás redirigido a una nueva página.</li>
+            <li><strong>Espera de 3 a 5 segundos:</strong> En la esquina superior derecha, verás una cuenta atrás.</li>
+            <li><strong>Haz clic en "Obtener enlace":</strong> Después de que termine la cuenta atrás, haz clic en el botón para proceder al enlace original.</li>
+          </ol>
+          <p>Completa este proceso 50 veces para desbloquear tu recompensa de $20!</p>
+        `
+      },
+      // Otros idiomas...
+      "ru": {
+        "title": "Заработайте $20, выполняя сокращатели",
+        "withdrawButton": "Вывести $20",
+        "completeText": "Вы должны выполнить все 50 сокращателей, чтобы разблокировать эту функцию.",
+        "instructions": `
+          <h2>Как завершить Ouo-сокращатели:</h2>
+          <ol>
+            <li><strong>Нажмите на кнопку сокращателя:</strong> Вы будете перенаправлены на новую страницу.</li>
+            <li><strong>Подождите 3-5 секунд:</strong> В правом верхнем углу увидите обратный отсчет.</li>
+            <li><strong>Нажмите "Получить ссылку":</strong> После окончания отсчета нажмите кнопку для перехода по оригинальной ссылке.</li>
+          </ol>
+          <p>Выполните этот процесс 50 раз, чтобы получить $20!</p>
+        `
+      },
+      "uk": {
+        "title": "Заробіть $20, виконуючи скорочення",
+        "withdrawButton": "Зняти $20",
+        "completeText": "Ви повинні виконати всі 50 скорочень, щоб розблокувати цю функцію.",
+        "instructions": `
+          <h2>Як завершити скорочувачі Ouo:</h2>
+          <ol>
+            <li><strong>Натисніть кнопку скорочення:</strong> Ви будете перенаправлені на нову сторінку.</li>
+            <li><strong>Зачекайте 3-5 секунд:</strong> У верхньому правому куті з'явиться лічильник.</li>
+            <li><strong>Натисніть "Отримати посилання":</strong> Після завершення лічильника натисніть кнопку для переходу до оригінальної сторінки.</li>
+          </ol>
+          <p>Виконайте цей процес 50 разів, щоб отримати винагороду в $20!</p>
+        `
+      },
+      "be": {
+        "title": "Зарабляйце $20, выконваючы скарочаныя спасылкі",
+        "withdrawButton": "Пачаць цяпер",
+        "completeText": "Вы павінны выканаць усе 50 скарочаных спасылак, каб разблакаваць гэтую функцыю.",
+        "instructions": `
+          <h2>Як выконваць спасылкі Ouo:</h2>
+          <ol>
+            <li><strong>Націсніце на кнопку скарочанай спасылкі:</strong> Вы будзеце перанакіраваны на новую старонку.</li>
+            <li><strong>Чакайце 3-5 секунд:</strong> У правым верхнім куце будзе адлік часу.</li>
+            <li><strong>Націсніце "Атрымаць спасылку":</strong> Пасля завяршэння адліку націсніце кнопку для пераходу да арыгінальнай старонкі.</li>
+          </ol>
+          <p>Выконвайце гэты працэс 50 разоў, каб атрымаць $20!</p>
+        `
+      },
+      "az": {
+        "title": "$20 qazanmaq üçün qısaldıcıları tamamlayın",
+        "withdrawButton": "$20 çıxarın",
+        "completeText": "Bu funksiyanı açmaq üçün 50 qısaldıcını tamamlamalısınız.",
+        "instructions": `
+          <h2>Ouo qısaldıcılarını necə tamamlamaq olar:</h2>
+          <ol>
+            <li><strong>Qısaldıcının düyməsini basın:</strong> Yeni bir səhifəyə yönləndiriləcəksiniz.</li>
+            <li><strong>3-5 saniyə gözləyin:</strong> Sağ üst küncdə geri sayım görəcəksiniz.</li>
+            <li><strong>"Linki alın" düyməsini basın:</strong> Geri sayım bitdikdən sonra düyməni basın və orijinal səhifəyə keçin.</li>
+          </ol>
+          <p>$20 qazanmaq üçün bu prosesi 50 dəfə tamamlayın!</p>
+        `
+      },
+      "hy": {
+        "title": "Ավարտեք կարճացումները և վաստակեք $20",
+        "withdrawButton": "Կանխիկացնել $20",
+        "completeText": "Ձեր $20 վաստակելու համար պետք է ավարտեք 50 կարճացում:",
+        "instructions": `
+          <h2>Ինչպես ավարտել Ouo կարճացումները:</h2>
+          <ol>
+            <li><strong>Սեղմեք կարճացումների կոճակը:</strong> Դուք կուղղորդվեք նոր էջ:</li>
+            <li><strong>Սպասեք 3-ից 5 վայրկյան:</strong> Էջի վերևի աջ անկյունում կտեսնեք հետհաշվարկ:</li>
+            <li><strong>Սեղմեք «Ստանալ հղում»:</strong> Հետհաշվարկը ավարտվելուց հետո սեղմեք կոճակը և անցեք հիմնական հղմանը:</li>
+          </ol>
+          <p>Վաստակեք $20՝ կատարելով այս գործընթացը 50 անգամ:</p>
+        `
+      },
+      // Asegúrate de incluir todos los idiomas que desees.
+    };
 
-        #withdraw-button:enabled {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        footer {
-            margin-top: 40px;
-            padding: 20px;
-            text-align: center;
-            background-color: #eeeeee;
-            width: 100%;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            width: 300px;
-            text-align: center;
-        }
-
-        .modal h2 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-
-        .claim-button {
-            background-color: #FF9800;
-            color: white;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-
-        .claim-button:hover {
-            background-color: #F57C00;
-        }
-    </style>
+    function changeLanguage(lang) {
+      document.getElementById("page-title").innerText = translations[lang].title;
+      document.getElementById("withdraw-button").innerText = translations[lang].withdrawButton;
+      document.getElementById("complete-text").innerText = translations[lang].completeText;
+      document.getElementById("instructions").innerHTML = translations[lang].instructions;
+    }
+  </script>
 </head>
 <body>
+  <div class="container">
     <header>
-        <h1 id="page-title">Earn Money by Clicking Ads!</h1>
-        <div id="balance-display">
-            Balance: $<span id="balance">0.00</span>
-        </div>
-        <div id="translator">
-            <select id="languageSelect" onchange="translatePage()">
-                <option value="en">English</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-                <option value="de">Deutsch</option>
-                <option value="ru">Русский</option>
-                <option value="uk">Українська</option>
-                <option value="pl">Polski</option>
-                <option value="it">Italiano</option>
-                <option value="pt">Português</option>
-                <option value="ro">Română</option>
-                <option value="bg">Български</option>
-                <option value="cs">Čeština</option>
-                <option value="sk">Slovenčina</option>
-                <option value="hu">Magyar</option>
-                <option value="lt">Lietuvių</option>
-                <option value="lv">Latviešu</option>
-                <option value="et">Eesti</option>
-            </select>
-        </div>
+      <h1 id="page-title">Gana $20 completando acortadores</h1>
+      <div class="language-selector">
+        <label for="language-select">Seleccionar idioma:</label>
+        <select id="language-select" onchange="changeLanguage(this.value)">
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="ru">Русский</option>
+          <option value="uk">Українська</option>
+          <option value="be">Беларуская</option>
+          <option value="az">Azərbaycan</option>
+          <option value="hy">Հայերեն</option>
+          <!-- Añadir más idiomas según se requiera -->
+        </select>
+      </div>
     </header>
 
-    <main>
-        <section class="instructions">
-            <h2 id="instructions-title">Instructions:</h2>
-            <p id="instructions-text">Earn between $0.02 and $0.04 per ad click. Click on ads as many times as you want, and keep the ad tab open for 5 seconds to maximize your earnings!</p>
-        </section>
+    <section>
+      <div class="shorteners-list">
+        <a href="https://ouo.io/Iuauitt" target="_blank" class="shortener-button">Completar acortador 1</a>
+        <!-- Añadir más botones de acortadores aquí -->
+      </div>
 
-        <div class="offer-grid">
-            <section class="offer-section">
-    <h2 class="offer-title" id="offer-title">Earn $0.02 to $0.04 per click!</h2>
-    <a class="offer-button" href="https://www.cpmrevenuegate.com/yqaef35tiq?key=387432c1d8fb0a02d4cd38bfbc560df3" target="_blank" onclick="startOffer(0.02)">Click Ad</a>
-</section>
-<section class="offer-section">
-    <h2 class="offer-title" id="offer-title-2">Earn $0.02 to $0.04 per click!</h2>
-    <a class="offer-button" href="https://www.cpmrevenuegate.com/yqaef35tiq?key=387432c1d8fb0a02d4cd38bfbc560df3" target="_blank" onclick="startOffer(0.03)">Click Ad</a>
-</section>
-<section class="offer-section">
-    <h2 class="offer-title" id="offer-title-3">Earn $0.02 to $0.04 per click!</h2>
-    <a class="offer-button" href="https://www.cpmrevenuegate.com/yqaef35tiq?key=387432c1d8fb0a02d4cd38bfbc560df3" target="_blank" onclick="startOffer(0.04)">Click Ad</a>
-</section>
-<section class="offer-section">
-    <h2 class="offer-title" id="offer-title-3">Earn $0.02 to $0.04 per click!</h2>
-    <a class="offer-button" href="https://www.cpmrevenuegate.com/yqaef35tiq?key=387432c1d8fb0a02d4cd38bfbc560df3" target="_blank" onclick="startOffer(0.04)">Click Ad</a>
-</section>
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
 
-        </div>
+      <button id="withdraw-button" class="withdraw-button" disabled>Retirar $20</button>
+      <p id="complete-text">Debes completar los 50 acortadores para desbloquear esta función.</p>
+    </section>
 
-        <div class="withdraw-section">
-            <h2 id="withdraw-title">Withdraw Your Earnings</h2>
-            <button id="withdraw-button" disabled>Withdraw Earnings</button>
-            <p id="withdraw-message">Minimum balance for withdrawal: $20.00</p>
-        </div>
-    </main>
+    <section class="instructions">
+      <div id="instructions">
+        <h2>Cómo completar los acortadores Ouo:</h2>
+        <ol>
+          <li><strong>Haz clic en el botón del acortador:</strong> Serás redirigido a una nueva página.</li>
+          <li><strong>Espera de 3 a 5 segundos:</strong> En la esquina superior derecha, verás una cuenta atrás.</li>
+          <li><strong>Haz clic en "Obtener enlace":</strong> Después de que termine la cuenta atrás, haz clic en el botón para proceder al enlace original.</li>
+        </ol>
+        <p>Completa este proceso 50 veces para desbloquear tu recompensa de $20!</p>
+      </div>
+    </section>
 
-    <footer>
-        <p>© 2024 Your Company Name. All rights reserved.</p>
+    <footer class="footer">
+      <p>&copy; 2024 - EarnMoney Inc.</p>
     </footer>
-
-    <!-- Modal -->
-    <div class="modal" id="bonusModal">
-        <div class="modal-content">
-            <h2 id="bonus-title">🎉 Welcome! 🎉</h2>
-            <p id="bonus-message">Get a bonus of $5.00 just for signing up!</p>
-            <button class="claim-button" id="claim-bonus">Claim Bonus</button>
-        </div>
-    </div>
-
-    <script>
-        window.onload = function() {
-            // Check if the bonus has been claimed
-            const bonusClaimed = localStorage.getItem('bonusClaimed');
-            const bonusModal = document.getElementById('bonusModal');
-            if (!bonusClaimed) {
-                bonusModal.style.display = 'flex';
-            }
-
-            // Initialize balance from localStorage
-            let balance = localStorage.getItem('balance');
-            if (balance === null) {
-                balance = 0;
-            } else {
-                balance = parseFloat(balance);
-            }
-            document.getElementById('balance').textContent = balance.toFixed(2);
-            updateWithdrawButton(balance);
-        };
-
-        // Function to update the withdraw button state
-        function updateWithdrawButton(balance) {
-            const withdrawButton = document.getElementById('withdraw-button');
-            if (balance >= 20) {
-                withdrawButton.disabled = false;
-            } else {
-                withdrawButton.disabled = true;
-            }
-        }
-
-        // Function to start offer and update balance
-        function startOffer(amount) {
-            const balanceElement = document.getElementById('balance');
-            let balance = parseFloat(balanceElement.textContent);
-            balance += amount;
-            balanceElement.textContent = balance.toFixed(2);
-            localStorage.setItem('balance', balance);
-            updateWithdrawButton(balance);
-        }
-
-        // Function to claim bonus
-        document.getElementById('claim-bonus').onclick = function() {
-            const balanceElement = document.getElementById('balance');
-            let balance = parseFloat(balanceElement.textContent);
-            balance += 5.00; // Adding bonus amount
-            balanceElement.textContent = balance.toFixed(2);
-            localStorage.setItem('balance', balance);
-            localStorage.setItem('bonusClaimed', 'true'); // Set bonus as claimed
-            document.getElementById('bonusModal').style.display = 'none';
-            updateWithdrawButton(balance);
-        };
-
-        // Function to translate the page
-        function translatePage() {
-            const lang = document.getElementById('languageSelect').value;
-            const translations = {
-                en: {
-                    title: "Earn Money by Clicking Ads!",
-                    instructions: "Earn between $0.02 and $0.04 per ad click. Click on ads as many times as you want, and keep the ad tab open for 5 seconds to maximize your earnings!",
-                    withdrawTitle: "Withdraw Your Earnings",
-                    withdrawMessage: "Minimum balance for withdrawal: $20.00",
-                },
-                es: {
-                    title: "¡Gana dinero haciendo clic en anuncios!",
-                    instructions: "Gana entre $0.02 y $0.04 por clic en anuncios. ¡Haz clic en anuncios tantas veces como quieras y mantén la pestaña abierta durante 5 segundos para maximizar tus ganancias!",
-                    withdrawTitle: "Retira tus ganancias",
-                    withdrawMessage: "Saldo mínimo para retirar: $20.00",
-                },
-                fr: {
-                    title: "Gagnez de l'argent en cliquant sur des annonces !",
-                    instructions: "Gagnez entre 0,02 $ et 0,04 $ par clic sur une annonce. Cliquez sur les annonces autant de fois que vous le souhaitez et gardez l'onglet ouvert pendant 5 secondes pour maximiser vos gains !",
-                    withdrawTitle: "Retirez vos gains",
-                    withdrawMessage: "Solde minimum pour le retrait : 20,00 $",
-                },
-                de: {
-                    title: "Verdienen Sie Geld mit dem Klicken auf Anzeigen!",
-                    instructions: "Verdienen Sie zwischen 0,02 $ und 0,04 $ pro Anzeigenklick. Klicken Sie auf Anzeigen, so oft Sie möchten, und halten Sie die Anzeigentabelle 5 Sekunden lang geöffnet, um Ihre Einnahmen zu maximieren!",
-                    withdrawTitle: "Ziehen Sie Ihre Einnahmen ab",
-                    withdrawMessage: "Mindestguthaben für den Abzug: 20,00 $",
-                },
-                ru: {
-                    title: "Зарабатывайте деньги, нажимая на объявления!",
-                    instructions: "Зарабатывайте от 0,02 до 0,04 доллара за клик по объявлению. Нажимайте на объявления столько раз, сколько хотите, и держите вкладку с объявлением открытой в течение 5 секунд, чтобы максимизировать свои доходы!",
-                    withdrawTitle: "Вывести ваши доходы",
-                    withdrawMessage: "Минимальный баланс для вывода: 20,00 $",
-                },
-                uk: {
-                    title: "Заробіть гроші, натискаючи на оголошення!",
-                    instructions: "Заробляйте від 0,02 до 0,04 долара за клік на оголошення. Натискайте на оголошення стільки разів, скільки хочете, і тримайте вкладку з оголошенням відкритою протягом 5 секунд, щоб максимізувати свої доходи!",
-                    withdrawTitle: "Вивести ваші доходи",
-                    withdrawMessage: "Мінімальний баланс для виведення: 20,00 $",
-                },
-                pl: {
-                    title: "Zarabiaj pieniądze, klikając w reklamy!",
-                    instructions: "Zarabiaj od 0,02 do 0,04 USD za kliknięcie reklamy. Klikaj w reklamy tak często, jak chcesz, i trzymaj zakładkę reklamy otwartą przez 5 sekund, aby zmaksymalizować swoje zarobki!",
-                    withdrawTitle: "Wypłać swoje zarobki",
-                    withdrawMessage: "Minimalne saldo do wypłaty: 20,00 $",
-                },
-                it: {
-                    title: "Guadagna denaro cliccando sugli annunci!",
-                    instructions: "Guadagna tra $0.02 e $0.04 per clic su un annuncio. Clicca sugli annunci quante più volte possibile e mantieni aperta la scheda per 5 secondi per massimizzare i tuoi guadagni!",
-                    withdrawTitle: "Preleva i tuoi guadagni",
-                    withdrawMessage: "Saldo minimo per il prelievo: 20,00 $",
-                },
-                pt: {
-                    title: "Ganhe dinheiro clicando em anúncios!",
-                    instructions: "Ganhe entre $0,02 e $0,04 por clique em anúncios. Clique nos anúncios quantas vezes quiser e mantenha a aba do anúncio aberta por 5 segundos para maximizar seus ganhos!",
-                    withdrawTitle: "Retire seus ganhos",
-                    withdrawMessage: "Saldo mínimo para retirada: $20,00",
-                },
-                ro: {
-                    title: "Câștigă bani dând clic pe anunțuri!",
-                    instructions: "Câștigă între 0,02 $ și 0,04 $ pe clic pe anunț. Dă clic pe anunțuri de câte ori vrei și menține fila anunțului deschisă timp de 5 secunde pentru a-ți maximiza câștigurile!",
-                    withdrawTitle: "Retrage-ți câștigurile",
-                    withdrawMessage: "Soldul minim pentru retragere: 20,00 $",
-                },
-                bg: {
-                    title: "Спечелете пари, като щракнете върху реклами!",
-                    instructions: "Спечелете между 0,02 $ и 0,04 $ за клик върху реклама. Щраквайте върху реклами толкова пъти, колкото искате, и дръжте раздела на рекламата отворен в продължение на 5 секунди, за да максимизирате печалбите си!",
-                    withdrawTitle: "Изтеглете печалбите си",
-                    withdrawMessage: "Минимален баланс за теглене: 20,00 $",
-                },
-                cs: {
-                    title: "Získejte peníze kliknutím na reklamy!",
-                    instructions: "Získejte mezi 0,02 $ a 0,04 $ za kliknutí na reklamu. Klikněte na reklamy, kolikrát chcete, a nechte kartu reklamy otevřenou po dobu 5 sekund, abyste maximalizovali své výdělky!",
-                    withdrawTitle: "Vyberte své výdělky",
-                    withdrawMessage: "Minimální zůstatek pro výběr: 20,00 $",
-                },
-                sk: {
-                    title: "Zarobte peniaze kliknutím na reklamy!",
-                    instructions: "Zarobte medzi 0,02 $ a 0,04 $ za klik na reklamu. Kliknite na reklamy toľkokrát, koľkokrát chcete, a nechajte kartu reklamy otvorenú 5 sekúnd, aby ste maximalizovali svoje zárobky!",
-                    withdrawTitle: "Vyberte si svoje zárobky",
-                    withdrawMessage: "Minimálny zostatok na výber: 20,00 $",
-                },
-                hu: {
-                    title: "Keressen pénzt hirdetésekre való kattintással!",
-                    instructions: "Keressen 0,02 $ és 0,04 $ között hirdetésenként. Kattintson a hirdetésekre annyiszor, ahányszor csak szeretné, és tartsa nyitva a hirdetés fülét 5 másodpercig, hogy maximalizálja a bevételét!",
-                    withdrawTitle: "Kérje vissza a nyereségét",
-                    withdrawMessage: "Minimális egyenleg a visszavonáshoz: 20,00 $",
-                },
-                lt: {
-                    title: "Uždirbkite pinigų spustelėdami skelbimus!",
-                    instructions: "Uždirbkite nuo 0,02 USD iki 0,04 USD už paspaudimą. Spustelėkite skelbimus tiek kartų, kiek norite, ir palaikykite skelbimo skirtuką atidarytą 5 sekundes, kad maksimaliai padidintumėte savo pajamas!",
-                    withdrawTitle: "Išimkite savo pajamas",
-                    withdrawMessage: "Minimali balanso suma, kad būtų galima išimti: 20,00 USD",
-                },
-                lv: {
-                    title: "Pelni naudu, noklikšķinot uz sludinājumiem!",
-                    instructions: "Pelni no 0,02 USD līdz 0,04 USD par klikšķi. Noklikšķiniet uz sludinājumiem tik daudz reižu, cik vēlaties, un turiet sludinājuma cilni atvērtu 5 sekundes, lai maksimāli palielinātu savus ienākumus!",
-                    withdrawTitle: "Izņemiet savus ienākumus",
-                    withdrawMessage: "Minimālais atlikums izņemšanai: 20,00 USD",
-                },
-                et: {
-                    title: "Teenige raha reklaamidele klikates!",
-                    instructions: "Teenige reklaami kliki eest 0,02 kuni 0,04 dollarit. Kliki reklaamidele nii palju kordi kui soovid ja hoia reklaami vahelehte 5 sekundit avatuna, et maksimeerida oma tulu!",
-                    withdrawTitle: "Võtke oma tulud välja",
-                    withdrawMessage: "Minimaalne saldo väljamiseks: 20,00 $",
-                }
-            };
-
-            document.getElementById('page-title').textContent = translations[lang].title;
-            document.getElementById('instructions-title').textContent = "Instructions:"; // Static title
-            document.getElementById('instructions-text').textContent = translations[lang].instructions;
-            document.getElementById('withdraw-title').textContent = translations[lang].withdrawTitle;
-            document.getElementById('withdraw-message').textContent = translations[lang].withdrawMessage;
-        }
-<script type="text/javascript">
-    aclib.runAutoTag({
-        zoneId: 'jwlrxcukwm',
-    });
-</script>
-
-    </script>
-<script type="text/javascript">
-    aclib.runAutoTag({
-        zoneId: 'q4clnp0j6y',
-    });
-</script>
-
+  </div>
 </body>
 </html>
+
+
+
+
+
+
